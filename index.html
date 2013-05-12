@@ -47,15 +47,84 @@
 
         <section>
           <h2>Brief</h2>
-          <p>Unit and integration tests with RSpec</p>
-          <p>Acceptance tests with Cucumber</p>
-          <p>Full-stack tests with htmlunit (through wrapper: celerity)</p>
-          <p>Continuous integration with Jenkins</p>
-          <p>Parallel test runs with specjour</p>
+          <p>Unit and integration tests (with RSpec)</p>
+          <p>Acceptance tests (with Cucumber)</p>
+          <p>Full-stack acceptance tests (with htmlunit/akephalos)</p>
+          <p>Continuous integration (with Jenkins)</p>
+          <p>Distributed test runs (with specjour)</p>
+          
+          <ul>
+            <li>Tests are documentation</li>
+            <li>Tests should run in the desert</li>
+            <li>Tests should be deep-stack</li>
+            <li>Tests should be continuous (automatic and fast)</li>
+            <li>Tests in production?</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Tests are documentation</h2>
+          <p>Dan North - Introducing BDD</p>
+          <p><a href="http://dannorth.net/introducing-bdd/">http://dannorth.net/introducing-bdd/</a></p>
+          <p>Write sentences with "should" for your unit tests</p>
+          <p>Write user stories for your acceptance tests</p>
+        </section>
+
+        <section>
+          <h2>Unit tests</h2>
+          <h4>(with RSpec)</h4>
+          <pre><code class="ruby" contenteditable>describe Address do
+  context "validations" do
+    it { should validate_presence_of(:line_1) }
+    it { should validate_presence_of(:city) }
+    it { should validate_presence_of(:country) }
+    it { should validate_presence_of(:postcode) }
+  end
+  context "with: 6 Bond Street, 192 SB1, Avon, UK" do
+    subject { Address.make!(:line_1 => "6 Bond Street", :postcode => "192 SB1", :city => "Avon", :country => "UK") }
+    its(:to_text) { should == "6 Bond Street, 192 SB1, Avon, UK" }
+  end
+end</code></pre>
+          <pre><code class="no-highlight" contenteditable>Address
+  with: 6 Bond Street, 192 SB1, Avon, UK
+    #to_text
+      should == "6 Bond Street, 192 SB1, Avon, UK"
+  validations
+    should require postcode to be set
+    should require country to be set
+    should require city to be set
+    should require line_1 to be set</code></pre>
+        </section>
+
+        <section>
+          <h2>Acceptance tests</h2>
+          <h4>(With Cucumber)</h4>
+          <pre><code class="no-highlight" contenteditable>Feature: Users can sign in
+ 
+  As an activated user
+  I want to be able to sign in
+  So that I can access the web application
+ 
+  Scenario: Sign in successfully
+    Given I am activated
+    When I sign in
+    Then I should be signed in
+  
+  Scenario: Sign in unsuccessfully
+    Given I am activated
+    When I try to sign in with the wrong credentials
+    Then I should not be signed in
+  </code></pre>
         </section>
 
         <section>
           <h2>Browser testing</h2>
+          
+          <p><a href="http://htmlunit.sourceforge.net/">http://htmlunit.sourceforge.net/</a></p>
+          <small><quote>a "GUI-Less browser for Java programs"</quote></small>
+          
+          <p><a href="http://oinopa.com/akephalos/">http://oinopa.com/akephalos/</a></p>
+          <small><quote>full-stack headless browser built on top of HtmlUnit</quote></small>
           
           <p>Desert testing: don't reference external services in your test environment</p>
           <pre><code class="haml" contenteditable># in your html layout
